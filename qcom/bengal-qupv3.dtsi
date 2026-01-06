@@ -120,18 +120,22 @@
                         interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>;
                         #address-cells = <1>;
                         #size-cells = <0>;
-                        clock-names = "se-clk","m-ahb","s-ahb";
+                        clock-names = "se-clk", "m-ahb", "s-ahb";
                         clocks = <&gcc GCC_QUPV3_WRAP0_S4_CLK>,
                         <&gcc GCC_QUPV3_WRAP_0_M_AHB_CLK>,
                         <&gcc GCC_QUPV3_WRAP_0_S_AHB_CLK>;
+						interconnect-names = "qup-core", "qup-config", "qup-memory";
+						interconnects = <&clk_virt MASTER_QUP_CORE_0 &clk_virt SLAVE_QUP_CORE_0>,
+						<&bimc MASTER_AMPSS_M0 &config_noc SLAVE_QUP_0>,
+						<&system_noc MASTER_QUP_0 &bimc SLAVE_EBI_CH0>;
                         dmas = <&gpi_dma0 0 4 3 64 0>,
                         <&gpi_dma0 1 4 3 64 0>;
-                        dma-names = "tx","rx";
-                        pinctrl-names = "default","sleep";
+                        dma-names = "tx", "rx";
+                        pinctrl-names = "default", "sleep";
                         pinctrl-0 = <&qupv3_se4_i2c_active>;
                         pinctrl-1 = <&qupv3_se4_i2c_sleep>;
                         qcom,wrapper-core = <&qupv3_0>;
-                        status = "OK";
+                        status = "disabled";
                 };
 
 		/* I2C Instance */
