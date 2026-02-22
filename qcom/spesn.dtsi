@@ -17,9 +17,9 @@
       st_st21nfc@8 {
         compatible = "st,st21nfc";
         reg = <0x08>;
-        st,irq-gpio = <&tlmm 70 0>;
-        st,reset-gpio = <&tlmm 69 0>;
-        st,clkreq-gpio = <&tlmm 71 0>;
+        irq-gpio = <&tlmm 70 0>;
+        reset-gpio = <&tlmm 69 0>;
+        clkreq-gpio = <&tlmm 71 0>;
         interrupt-parent = <&tlmm>;
         interrupts = <70 0>;
         interrupt-names = "nfc_irq";
