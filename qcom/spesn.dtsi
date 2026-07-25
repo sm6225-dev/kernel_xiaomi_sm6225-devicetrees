@@ -441,5 +441,93 @@ maxim_ds28e16:
 };
 
 &sdhc_2 {
-	cd-gpios = <&tlmm 88 0>;
+        cd-gpios = <&tlmm 88 0>;
+};
+
+/ {
+        dummy_sensor_reg: dummy_sensor_reg {
+                compatible = "regulator-fixed";
+                regulator-name = "dummy_sensor_reg";
+                regulator-min-microvolt = <2800000>;
+                regulator-max-microvolt = <2800000>;
+                regulator-always-on;
+        };
+};
+
+&tlmm {
+        sensor_int_32: sensor_int_32 {
+                mux {
+                        pins = "gpio32";
+                        function = "gpio";
+                };
+                config {
+                        pins = "gpio32";
+                        drive-strength = <2>;
+                        bias-pull-down;
+                };
+        };
+
+        sensor_int_111: sensor_int_111 {
+                mux {
+                        pins = "gpio111";
+                        function = "gpio";
+                };
+                config {
+                        pins = "gpio111";
+                        drive-strength = <2>;
+                        bias-pull-up;
+                };
+        };
+
+
+};
+
+&L9A {
+        status = "okay";
+        regulator-min-microvolt = <1800000>;
+        regulator-max-microvolt = <1800000>;
+        regulator-always-on;
+};
+
+&L22A { status = "okay"; regulator-always-on; };
+&L24A { status = "okay"; regulator-always-on; };
+&L5A { status = "okay"; regulator-always-on; };
+&L15A { status = "okay"; regulator-always-on; };
+
+&qupv3_se1_i2c {
+        status = "okay";
+        bu27030@38 {
+                compatible = "rohm,bu27030";
+                reg = <0x38>;
+                interrupt-parent = <&tlmm>;
+                interrupts = <111 1>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&sensor_int_111>;
+                vdd-supply = <&dummy_sensor_reg>;
+                vio-supply = <&L9A>;
+        };
+};
+
+&qupv3_se2_i2c {
+        status = "okay";
+        bmi26x@68 {
+                compatible = "bosch,bmi260";
+                reg = <0x68>;
+                interrupt-parent = <&tlmm>;
+                interrupts = <32 1>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&sensor_int_32>;
+                vdd-supply = <&dummy_sensor_reg>;
+                vddio-supply = <&L9A>;
+        };
+
+        ak0991x@c {
+                status = "disabled";
+                compatible = "akm,ak09918";
+                reg = <0x0c>;
+                interrupt-parent = <&tlmm>;
+                interrupts = <113 1>;
+                vdd-supply = <&dummy_sensor_reg>;
+                vddio-supply = <&L9A>;
+        };
 };
