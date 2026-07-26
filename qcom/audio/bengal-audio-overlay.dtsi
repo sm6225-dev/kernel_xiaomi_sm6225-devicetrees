@@ -8,8 +8,8 @@
 	qcom,bolero-version = <5>;
 	bolero-clk-rsc-mngr {
 		compatible = "qcom,bolero-clk-rsc-mngr";
-		qcom,fs-gen-sequence = <0x3000 0x1 0x1>, <0x3004 0x3 0x3>,
-					<0x3004 0x3 0x1>, <0x3080 0x2 0x2>;
+		qcom,fs-gen-sequence = <0x3000 0x1>,
+					<0x3004 0x1>, <0x3080 0x2>;
 	qcom,rx_mclk_mode_muxsel = <0x0a5640d8>;
 	qcom,va_mclk_mode_muxsel = <0x0a7a0000>;
 	clock-names = "tx_core_clk", "tx_npl_clk", "rx_core_clk", "rx_npl_clk",
@@ -45,7 +45,6 @@
 			#size-cells = <0>;
 			clock-names = "lpass_audio_hw_vote";
 			clocks = <&lpass_audio_hw_vote 0>;
-			qcom,swr-master-version = <0x01060000>;
 			qcom,swr_master_id = <2>;
 			qcom,swrm-hctl-reg = <0x0a6a9098>;
 			qcom,mipi-sdw-block-packing-mode = <1>;
@@ -85,7 +84,6 @@
 			#size-cells = <0>;
 			clock-names = "lpass_audio_hw_vote";
 			clocks = <&lpass_audio_hw_vote 0>;
-			qcom,swr-master-version = <0x01060000>;
 			qcom,swr_master_id = <3>;
 			qcom,swrm-hctl-reg = <0x0a7ec100>;
 			qcom,mipi-sdw-block-packing-mode = <1>;
@@ -216,15 +214,27 @@
 		nvmem-cells = <&adsp_variant>;
 		nvmem-cell-names = "adsp_variant";
 
-		asoc-codec  = <&stub_codec>, <&bolero_cdc>,
-				<&wcd937x_codec> , <&wsa881x_i2c_e>;
+		asoc-codec  = <&stub_codec>, <&bolero_cdc>, <&bolero_cdc>,
+				<&wcd937x_codec> , <&stub_codec>;
 		asoc-codec-names = "msm-stub-codec.1", "bolero-codec",
-				"wcd937x_codec", "wsa-codec0";
+				"bolero_codec", "wcd937x_codec", "wsa-codec0";
+		qcom,codec-max-aux-devs = <0>;
 		qcom,wsa-max-devs = <0>;
 		qcom,wsa-devs = <0>;
 		qcom,wsa-aux-dev-prefix = "SpkrMono";
 		qcom,msm_audio_ssr_devs = <&audio_gpr>, <&lpi_tlmm>,
 					<&bolero_cdc>;
+
+		/* Resolve legacy platform_name links to the 5.15 DT devices. */
+		asoc-platform = <&pcm0>, <&pcm1>, <&pcm2>, <&voip>, <&voice>,
+				<&loopback>, <&compress>, <&hostless>, <&afe>,
+				<&lsm>, <&routing>, <&pcm_noirq>;
+		asoc-platform-names = "msm-pcm-dsp.0", "msm-pcm-dsp.1",
+				"msm-pcm-dsp.2", "msm-voip-dsp",
+				"msm-pcm-voice", "msm-pcm-loopback",
+				"msm-compress-dsp", "msm-pcm-hostless",
+				"msm-pcm-afe", "msm-lsm-client",
+				"msm-pcm-routing", "msm-pcm-dsp-noirq";
 	};
 
 	cdc_pri_mi2s_gpios: pri_mi2s_pinctrl {
